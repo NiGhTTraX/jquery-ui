@@ -861,7 +861,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		// move the item into the container if it's not there already
 		if(this.containers.length === 1) {
 			if (!this.containers[innermostIndex].containerCache.over) {
-				this.containers[innermostIndex]._trigger("over", event, this._uiHash(this));
+				this.containers[innermostIndex]._trigger("over", event, this._uiHash());
 				this.containers[innermostIndex].containerCache.over = 1;
 			}
 		} else {
