@@ -403,7 +403,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 					break;
 				}
 
-				this._trigger("change", event, this._uiHash());
+				this.currentContainer._trigger("change", event, this._uiHash());
 				break;
 			}
 		}
