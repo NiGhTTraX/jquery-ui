@@ -85,6 +85,74 @@ test("change", function() {
 
 });
 
+test("change with connected sortable", function() {
+	expect( 5 );
+
+	var hash1, hash2,
+		overCount1 = 0, overCount2 = 0;
+
+	$( ".connectWith" ).sortable({
+		connectWith: ".connectWith"
+	});
+
+	$( "#sortable" ).on( "sortchange", function( e, ui ) {
+		hash1 = ui;
+		overCount1++;
+	});
+
+	$( "#sortable2" ).on( "sortchange", function( e, ui ) {
+		hash2 = ui;
+		overCount2++;
+	});
+
+	$( "#sortable" ).find( "li:last" ).simulate( "drag", {
+		dy: 20
+	});
+
+	ok( hash1, "change event on #sortable triggered" );
+	equal( overCount1, 1, "change event on #sortable triggered only once" );
+
+	ok( hash2, "change event on #sortable2 triggered" );
+	equal( hash2.sender[0], $( "#sortable" )[0], "UI hash does not include: sender" );
+	equal( overCount2, 1, "change event on #sortable2 triggered only once" );
+});
+
+test("change with connected sortable and multiple triggers", function() {
+	expect( 5 );
+
+	var hash1, hash2,
+		overCount1 = 0, overCount2 = 0;
+
+	$( ".connectWith" ).sortable({
+		connectWith: ".connectWith"
+	});
+
+	$(document).on("sortchange", ".ui-sortable", function() { console.log(this); });
+
+	$( "#sortable" ).on( "sortchange", function( e, ui ) {
+		hash1 = ui;
+		overCount1++;
+	});
+
+	$( "#sortable2" ).on( "sortchange", function( e, ui ) {
+		hash2 = ui;
+		overCount2++;
+	});
+
+	$( "#sortable" ).find( "li:last" ).simulate( "drag", {
+		dy: 3000,
+		moves: 80
+	});
+	console.log($("#sortable2")[0]);
+
+	ok( hash1, "change event on #sortable triggered" );
+	equal( overCount1, 1, "change event on #sortable triggered only once" );
+
+	ok( hash2, "change event on #sortable2 triggered" );
+	equal( hash2.sender[0], $( "#sortable" )[0], "UI hash does not include: sender" );
+	equal( overCount2, 2, "change event on #sortable2 triggered twice" );
+});
+
 test("beforeStop", function() {
 	expect( 7 );
 
