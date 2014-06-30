@@ -312,7 +312,7 @@ test( "over", function() {
 		dy: 20
 	});
 
-	ok( hash, "stop event triggered" );
+	ok( hash, "over event triggered" );
 	ok( hash.helper, "UI includes: helper" );
 	ok( hash.placeholder, "UI hash includes: placeholder" );
 	ok( hash.position && ( "top" in hash.position && "left" in hash.position ), "UI hash includes: position" );
@@ -350,6 +350,55 @@ test( "over from draggable", function() {
 	ok( hash.offset && ( hash.offset.top && hash.offset.left ), "UI hash includes: offset" );
 	ok( hash.item, "UI hash includes: item" );
 	ok( !hash.sender, "UI hash should not include: sender" );
+	equal( overCount, 1, "over fires only once" );
+});
+
+test( "#9335: draggable over connected sortable fires over event", function() {
+	expect( 3 );
+
+	var hash,
+		overCount = 0,
+		item = $( "<div></div>" ).text( "6" ).insertAfter( "#sortable" );
+
+	item.draggable({
+		connectToSortable: "#sortable"
+	});
+	$( ".connectWith" ).sortable({
+		connectWith: ".connectWith",
+		over: function( e, ui ) {
+			hash = ui;
+			overCount++;
+		}
+	});
+
+	item.simulate( "drag", {
+		dy: -20
+	});
+
+	ok( hash, "over event triggered" );
+	ok( !hash.sender, "UI should not include: sender" );
+	equal( overCount, 1, "over fires only once" );
+});
+
+test( "#9335: over fires with connected sortable", function() {
+	expect( 3 );
+
+	var hash,
+		overCount = 0;
+
+	$( ".connectWith" ).sortable({
+		connectWith: ".connectWith"
+	});
+	$( "#sortable2" ).on("sortover", function(e, ui) {
+		hash = ui;
+		overCount++;
+	});
+	$( "#sortable" ).find( "li:eq(0)" ).simulate( "drag", {
+		dy: 102
+	});
+
+	ok( hash, "over event triggered" );
+	equal( hash.sender[0], $(" #sortable" )[0], "UI includes: sender" );
 	equal( overCount, 1, "over fires only once" );
 });
 
