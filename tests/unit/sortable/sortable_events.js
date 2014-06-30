@@ -127,8 +127,6 @@ test("change with connected sortable and multiple triggers", function() {
 		connectWith: ".connectWith"
 	});
 
-	$(document).on("sortchange", ".ui-sortable", function() { console.log(this); });
-
 	$( "#sortable" ).on( "sortchange", function( e, ui ) {
 		hash1 = ui;
 		overCount1++;
@@ -143,7 +141,6 @@ test("change with connected sortable and multiple triggers", function() {
 		dy: 3000,
 		moves: 80
 	});
-	console.log($("#sortable2")[0]);
 
 	ok( hash1, "change event on #sortable triggered" );
 	equal( overCount1, 1, "change event on #sortable triggered only once" );
